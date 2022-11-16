@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('company_id');
             $table->string('name');
             $table->string('email');
-            $table->string('position')->nullable();;
-            $table->string('contact')->nullable();;
+            $table->string('position')->nullable();
+            $table->string('contact')->nullable();
             $table->timestamps();
         });
     }
