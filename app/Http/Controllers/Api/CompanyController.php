@@ -96,4 +96,14 @@ class CompanyController extends Controller
           ]);
     }
 
+    public function fetchCompanies()
+    {
+        $companaies = Company::with('contacts', 'contacts.notes')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Data Retrived Successfully',
+            'companies' => $companaies
+          ]);
+    }
+
 }

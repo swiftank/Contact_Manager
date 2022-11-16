@@ -26,6 +26,7 @@ Route::post('/auth/login', [AuthController::class, 'loginUser'] );
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout'] );
+    Route::get('/companies/data', [CompanyController::class, 'fetchCompanies'] );
     Route::apiResource('companies', CompanyController::class);
     Route::get('/contacts_by_company/{company_id}', [CompanyController::class, 'contactByCompany'] );
     Route::apiResource('contacts', ContactController::class);
