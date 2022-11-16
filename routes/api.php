@@ -22,5 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('companies', CompanyController::class);
+Route::get('/contacts_by_company/{company_id}', [CompanyController::class, 'contactByCompany'] );
 Route::apiResource('contacts', ContactController::class);
+Route::post('/multiple/contacts', [ContactController::class, 'addMultipleContacts'] );
+Route::get('/search', [CompanyController::class, 'search'] );
 Route::apiResource('notes', NoteController::class);

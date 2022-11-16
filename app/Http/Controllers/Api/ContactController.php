@@ -88,7 +88,15 @@ class ContactController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Contact Updated Successfully',
-            'company' => $contact
+          ]);
+    }
+    
+    public function addMultipleContacts(Request $request){
+        $contacts = Contact::insert($request->all());
+        return response()->json([
+            'status' => true,
+            'message' => 'Contacts Added Successfully',
+            'company' => $contacts
           ]);
     }
 

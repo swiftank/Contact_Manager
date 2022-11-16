@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -18,7 +19,44 @@ class CompanyController extends Controller
         $companies = Company::all();
         return response()->json([
          'status' => true,
-         'posts' => $companies,
+         'companies' => $companies,
+        ]);
+    }
+
+    /**
+     * Search by company name and contact name .
+     *
+     */
+    public function search(Request $request)
+    {
+        $searchString  = $request->name;
+        $searchType  = $request->type;
+        $data = "";
+        if($searchString)
+        {
+            if($searchType == 'company'){
+                $data = Company::where('name', 'like', '%'.$searchString.'%')->get();
+            }else{
+               $data = Contact::where('name', 'like', '%'.$searchString.'%')->get();
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $data,
+            ]);
+        }
+    }
+
+    /**
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function contactByCompany($company_id)
+    {
+        $company = Company::with( 'contacts' )->find($company_id);
+        return response()->json([
+         'status' => true,
+         'company' => $company,
         ]);
     }
 
