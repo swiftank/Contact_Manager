@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('email');
             $table->string('position')->nullable();;
             $table->string('contact')->nullable();;
-            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }
