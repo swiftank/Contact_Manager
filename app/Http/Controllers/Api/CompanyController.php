@@ -16,11 +16,18 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
-        return response()->json([
-         'status' => true,
-         'companies' => $companies,
-        ]);
+        try {
+            $companies = Company::all();
+            return response()->json([
+                'status' => true,
+                'companies' => $companies,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
     /**
@@ -29,20 +36,26 @@ class CompanyController extends Controller
      */
     public function search(Request $request)
     {
-        $searchString  = $request->name;
-        $searchType  = $request->type;
-        $data = "";
-        if($searchString)
-        {
-            if($searchType == 'company'){
-                $data = Company::where('name', 'like', '%'.$searchString.'%')->get();
-            }else{
-               $data = Contact::where('name', 'like', '%'.$searchString.'%')->get();
-            }
+        try {
+            $searchString  = $request->name;
+            $searchType  = $request->type;
+            $data = "";
+            if ($searchString) {
+                if ($searchType == 'company') {
+                    $data = Company::where('name', 'like', '%' . $searchString . '%')->get();
+                } else {
+                    $data = Contact::where('name', 'like', '%' . $searchString . '%')->get();
+                }
 
+                return response()->json([
+                    'status' => true,
+                    'data' => $data,
+                ]);
+            }
+        } catch (\Exception $e) {
             return response()->json([
-                'status' => true,
-                'data' => $data,
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
             ]);
         }
     }
@@ -53,11 +66,18 @@ class CompanyController extends Controller
      */
     public function contactByCompany($company_id)
     {
-        $company = Company::with( 'contacts' )->find($company_id);
-        return response()->json([
-         'status' => true,
-         'company' => $company,
-        ]);
+        try {
+            $company = Company::with('contacts')->find($company_id);
+            return response()->json([
+                'status' => true,
+                'company' => $company,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
 
@@ -69,13 +89,20 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $company = Company::create($request->all());
+        try {
+            $company = Company::create($request->all());
 
-        return response()->json([
-          'status' => true,
-          'message' => 'Company Created Successfully',
-          'company' => $company
-        ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Company Created Successfully',
+                'company' => $company
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
 
@@ -88,22 +115,35 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        $company->update($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Company Updated Successfully',
-            'company' => $company
-          ]);
+        try {
+            $company->update($request->all());
+            return response()->json([
+                'status' => true,
+                'message' => 'Company Updated Successfully',
+                'company' => $company
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
     public function fetchCompanies()
     {
-        $companaies = Company::with('contacts', 'contacts.notes')->get();
-        return response()->json([
-            'status' => true,
-            'message' => 'Data Retrived Successfully',
-            'companies' => $companaies
-          ]);
+        try {
+            $companaies = Company::with('contacts', 'contacts.notes')->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Data Retrived Successfully',
+                'companies' => $companaies
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
-
 }

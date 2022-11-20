@@ -15,11 +15,18 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::paginate(10);
-        return response()->json([
-         'status' => true,
-         'contacts' => $contacts,
-        ]);
+        try {
+            $contacts = Contact::paginate(10);
+            return response()->json([
+                'status' => true,
+                'contacts' => $contacts,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
     /**
@@ -30,13 +37,20 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        $contact = Contact::create($request->all());
+        try {
+            $contact = Contact::create($request->all());
 
-        return response()->json([
-          'status' => true,
-          'message' => 'Contact Created Successfully',
-          'contact' => $contact
-        ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Contact Created Successfully',
+                'contact' => $contact
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
     /**
@@ -47,11 +61,18 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        return response()->json([
-            'status' => true,
-            'message' => 'Date Retrieved Successfully',
-            'contact' => $contact
-          ]);
+        try {
+            return response()->json([
+                'status' => true,
+                'message' => 'Date Retrieved Successfully',
+                'contact' => $contact
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
 
@@ -64,20 +85,34 @@ class ContactController extends Controller
      */
     public function update(Request $request, Contact $contact)
     {
-        $contact->update($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Contact Updated Successfully',
-          ]);
-    }
-    
-    public function addMultipleContacts(Request $request){
-        $contacts = Contact::insert($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Contacts Added Successfully',
-            'company' => $contacts
-          ]);
+        try {
+            $contact->update($request->all());
+            return response()->json([
+                'status' => true,
+                'message' => 'Contact Updated Successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
     }
 
+    public function addMultipleContacts(Request $request)
+    {
+        try {
+            $contacts = Contact::insert($request->all());
+            return response()->json([
+                'status' => true,
+                'message' => 'Contacts Added Successfully',
+                'company' => $contacts
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "Something went wrong. Please try after some time."
+            ]);
+        }
+    }
 }
